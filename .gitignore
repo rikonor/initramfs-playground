@@ -1,4 +1,4 @@
 main
 initramfs.cpio.gz
-src/target
+my-server/target
 rootfs
