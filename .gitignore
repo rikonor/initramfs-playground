@@ -1,0 +1,4 @@
+main
+initramfs.cpio.gz
+src/target
+rootfs
