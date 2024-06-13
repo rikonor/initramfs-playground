@@ -32,4 +32,6 @@ qemu:
 	qemu-system-x86_64 -nographic -m 2048 \
 		-kernel boot/bzImage \
 		-initrd initramfs.cpio.gz \
-		-append "console=ttyS0"
+		-append "console=ttyS0" \
+		-device e1000,netdev=net0 \
+		-netdev user,id=net0,hostfwd=tcp::3000-:3000
