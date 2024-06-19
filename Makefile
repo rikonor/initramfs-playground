@@ -1,7 +1,9 @@
 TARGET_MAIN 	= x86_64-unknown-linux-musl
 IMAGE_MAIN_PATH = usr/bin/main
 
-all: rootfs init main initramfs qemu
+QEMU_BIN ?= qemu-system-x86_64
+
+all: clean rootfs init main initramfs qemu
 
 clean:
 	rm -rf \
@@ -29,7 +31,7 @@ initramfs:
 	cd ..
 
 qemu:
-	qemu-system-x86_64 -nographic -m 2048 \
+	$(QEMU_BIN) -nographic -m 2048 \
 		-kernel boot/bzImage \
 		-initrd initramfs.cpio.gz \
 		-append "console=ttyS0" \
