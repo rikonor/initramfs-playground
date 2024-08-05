@@ -3,7 +3,7 @@ IMAGE_MAIN_PATH = usr/bin/main
 
 QEMU_BIN ?= qemu-system-x86_64
 
-all: clean rootfs init main initramfs qemu
+all: initramfs qemu
 
 clean:
 	rm -rf \
@@ -25,7 +25,7 @@ main:
 	mv target/$(TARGET_MAIN)/release/my-server ../rootfs/$(IMAGE_MAIN_PATH) && \
 	cd ..
 
-initramfs:
+initramfs: clean rootfs init main
 	cd rootfs && \
 	find . | cpio -o -H newc | gzip > ../initramfs.cpio.gz && \
 	cd ..
