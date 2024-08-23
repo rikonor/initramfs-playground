@@ -1,0 +1,2 @@
+#!/bin/sh
+exec chpst -uroot /usr/bin/main 2>&1

@@ -22,12 +22,21 @@ RUN \
         kmod \
         udhcpc \
         wget \
+        runit \
     && \
     : "Clean up for improving reproducibility (optional)" && \
     rm -rf /var/log/* /var/cache/ldconfig/aux-cache
 
 # Kernel
 
-ADD https://github.com/dfinity/sev-snp-deps/releases/download/AMDESE%2Flinux-a38297e3fb012ddfa7ce0321a7e5a8daeb1872b6/linux-image-6.9.0-snp-guest-a38297e-snp-guest-a38297e_6.9.0-1_amd64.deb kernel.deb
+ADD https://github.com/dfinity/sev-snp-deps/releases/download/kernel-guest-1e02b82/linux-image-6.9.0-snp-guest-a38297e_6.9.0-1_amd64.deb kernel.deb
 
 RUN dpkg -i kernel.deb && rm kernel.deb
+
+# Runit
+
+ADD sv /etc/service
+
+# Init
+
+COPY --chmod=755 init.sh /init

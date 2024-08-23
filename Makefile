@@ -14,10 +14,6 @@ clean:
 rootfs:
 	docker build -f Dockerfile -o rootfs .
 
-init:
-	cp init.sh rootfs/init && \
-	chmod +x rootfs/init
-
 .PHONY: main
 main:
 	cd my-server && \
@@ -25,15 +21,15 @@ main:
 	mv target/$(TARGET_MAIN)/release/my-server ../rootfs/$(IMAGE_MAIN_PATH) && \
 	cd ..
 
-initramfs: clean rootfs init main
+initramfs: clean rootfs main
 	cd rootfs && \
 	find . | cpio -o -H newc | gzip > ../initramfs.cpio.gz && \
 	cd ..
 
 qemu:
-	$(QEMU_BIN) -nographic -m 2048 \
-		-kernel boot/bzImage \
+	$(QEMU_BIN) \
+		-enable-kvm -m 2G \
+		-kernel boot/vmlinuz-6.9.0-snp-guest-a38297e -append "console=ttyS0" \
 		-initrd initramfs.cpio.gz \
-		-append "console=ttyS0" \
-		-device e1000,netdev=net0 \
-		-netdev user,id=net0,hostfwd=tcp::3000-:3000
+		-nographic -serial stdio -nodefaults \
+		-device e1000,netdev=net0 -netdev user,id=net0,hostfwd=tcp::3000-:3000

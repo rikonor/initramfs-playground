@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Create log dir
+if [ ! -d /var/log/tmp ]; then
+    mkdir -p /var/log/tmp
+fi
+
+exec chpst -uroot svlogd -tt /var/log/tmp
